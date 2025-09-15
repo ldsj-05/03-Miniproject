@@ -25,10 +25,10 @@ This project, built with MicroPython and Thonny, takes the input of the photores
 
 ## Setup
 
-* We have Install Thonny and picked Micropython as our language
-* Plug in the Pi Pico
-* Run main.py
-* To record, type in the terminal the appropriate commands: start_recording(), stop_recording(), start_replay(), stop_replay()
+* Install Thonny and picked Micropython as our language
+* Plugged in the Pi Pico
+* Ran main.py
+* When using the record function, typed in the terminal the appropriate commands: start_recording(), stop_recording(), start_replay(), stop_replay()
 
 ## Tasks
 * Tasks were distributed using the issues tab. We put all the tasks we needed to complete and used the assign function to assign them to the correct individual.
