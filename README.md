@@ -2,12 +2,12 @@
 
 [Project definition](./Project.md)
 
+This project, built with MicroPython and Thonny, takes the input of the photoresistor's brightness and outputs it as a sound, then is translated into a pitch on the piezo buzzer
+
 ## Features 
 * Light to Sound conversion while continuously reading the photoresistor and mapping to a frequency range
 * Recording with feedback, so when pressed the program clears past data and stores it using JSON Save/Load 
 * Replay Mode to iterate through the stored samples in original order
-
-This project, built with MicroPython and Thonny, takes the input of the photoresistor's brightness and outputs it as a sound, then is translated into a pitch on the piezo buzzer
 
 
 
