@@ -269,7 +269,9 @@ async def main():
                         clamped_light, min_light, max_light, min_freq, max_freq
                     )
                     frequency_refresh = 0
+                print(frequency)
                 Play_Chord(frequency, current_rel_time%dur_ms, light_00, light_0)
+                #buzzer_pin.freq(frequency)
                 #buzzer_pin.duty_u16(32768)  # 50% duty cycle
             else:
                 stop_tone()  # If it's very dark, be quiet
