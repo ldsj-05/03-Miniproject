@@ -27,7 +27,7 @@ This project, built using MicroPython and Thonny, produces sound based on the br
 
 * Install Thonny and picked Micropython as our language
 * Plugged in the Pi Pico
-* Ran main.py
+* Ran light_orchestra.py
 * When using the record function, typed in the terminal the appropriate commands: start_recording(), stop_recording(), start_replay(), stop_replay()
 
 ## Tasks
