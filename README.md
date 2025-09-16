@@ -1,6 +1,6 @@
 # 2025 Fall ECE Senior Design Miniproject Team 6
 
-This project, built with MicroPython and Thonny, takes the input of the photoresistor's brightness and outputs it as a sound, then is translated into a pitch on the piezo buzzer. 
+This project, built using MicroPython and Thonny, produces sound based on the brightness of the input light. It takes the brightness input via a photodiode, which is then translated into a pitch, which is then sent to the piezo buzzer to output as sound.  
 
 
 [Project definition](./Project.md)
