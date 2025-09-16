@@ -8,9 +8,9 @@ This project, built using MicroPython and Thonny, produces sound based on the br
 
 
 ## Features 
-* Light to Sound conversion while continuously reading the photoresistor and mapping to a frequency range
-* Recording with feedback, so when pressed the program clears past data and stores it using JSON Save/Load 
-* Replay Mode to iterate through the stored samples in original order
+* Continuous light to sound conversion from reading from the photoresistor and mapping it to a frequency range
+* Recording and and saving to record and save the played notes for use later
+* Replay Mode to iterate through the stored samples in the original order
 
 
 
@@ -25,13 +25,13 @@ This project, built using MicroPython and Thonny, produces sound based on the br
 
 ## Setup
 
-* Install Thonny and picked Micropython as our language
-* Plugged in the Pi Pico
-* Ran light_orchestra.py
-* When using the record function, typed in the terminal the appropriate commands: start_recording(), stop_recording(), start_replay(), stop_replay()
+* Install Thonny and pick Micropython as the language
+* Plug in the Pi Pico
+* Run light_orchestra.py
+* When using the record function, type the appropriate commands into the terminal: start_recording(), stop_recording(), start_replay(), stop_replay()
 
 ## Tasks
-* Tasks were distributed using the issues tab. We put all the tasks we needed to complete and used the assign function to assign them to the correct individual.
+* Tasks were distributed using the issues tab. We put all the tasks we needed to complete and used the assign function to assign them to the correct individuals.
 * Simulator Test - Yena Yu
 * Hardware Test - Wenyuan Liu
 * Light to Music - Leah Jones
