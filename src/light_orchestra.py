@@ -17,7 +17,83 @@ recording_active = False
 replay_active = False
 replay_index = 0
 
+start_time = time.ticks_ms()
+NOTES_C3_C7 = [
+    131,147,165,175,196,220,247,         # C3..B3
+    262,294,330,349,392,440,494,         # C4..B4
+    523,587,659,698,784,880,988,         # C5..B5
+    1047,1175,1319,1397,1568,1760,1976,  # C6..B6
+    2093
+]
+bpm = 120
+BEAT_MS = int(60000 / bpm)
+frequency = 262
+dur_ms   = int(BEAT_MS * 4)
+chord = [7,2,4,2]
+
+
 # --- Core Functions ---
+def Play_Chord(base_frequency : int, time : int, light_00 : int, light_0 : int):
+    global chord
+    
+    
+    if (light_0-light_00) >= 2*light_00:
+        chord[0] = 4
+        if (light_0-light_00) < 3*light_00:
+            chord[1] = 2
+            chord[2] = 0
+            chord[3] = 7
+        elif (light_0-light_00) < 4*light_00:
+            chord[1] = 7
+            chord[2] = 0
+            chord[3] = 4
+        else:
+            chord[1] = 0
+            chord[2] = 7
+            chord[3] = 4
+    else:
+        chord[0] = 0
+        if (light_0-light_00) < 0:
+            if base_frequency >= 262:
+                chord[1] = -3
+                chord[2] = -5
+                chord[3] = -7
+            else:
+                chord[1] = 4
+                chord[2] = 2
+                chord[3] = 0
+        elif (light_0-light_00) < 0.25*light_00:
+            chord[1] = 4
+            chord[2] = 7
+            chord[3] = 4
+        else:
+            chord[1] = 2
+            chord[2] = 4
+            chord[3] = 7
+        
+    
+    
+    note_0 = NOTES_C3_C7[nearest_white_note(frequency)+chord[0]]
+    note_1 = NOTES_C3_C7[nearest_white_note(frequency)+chord[1]]
+    note_2 = NOTES_C3_C7[nearest_white_note(frequency)+chord[2]]
+    note_3 = NOTES_C3_C7[nearest_white_note(frequency)+chord[3]]
+    
+    #print(chord[0],chord[1],chord[2],chord[3])
+    #print(light_0,light_00)
+    #print(base_frequency)
+    if time < 500:
+        buzzer_pin.freq(note_0)
+
+    elif time < 1000:
+        buzzer_pin.freq(note_1)
+
+    elif time < 1500:
+        buzzer_pin.freq(note_2)
+
+    else:
+        buzzer_pin.freq(note_3)
+    buzzer_pin.duty_u16(32768)
+
 
 def play_tone(frequency: int, duration_ms: int) -> None:
     """Plays a tone on the buzzer for a given duration."""
@@ -106,23 +182,45 @@ def stop_replay():
     else:
         print("No replay active.")
 
+def nearest_white_note(freq_hz: int):
+    """Return (name, freq) for nearest white-key note between C3 and B6."""
+    idx = min(range(len(NOTES_C3_C7)), key=lambda k: abs(NOTES_C3_C7[k] - freq_hz))
+    return idx
+
 async def main():
     """Main execution loop."""
 
     # These ranges define how light maps to frequency
     min_light = 1000
     max_light = 65000
-    min_freq = 261  # C4
+    min_freq = 130  # C3
     max_freq = 1046 # C6
 
     last_timestamp = time.ticks_ms()
-
+    frequency_refresh = 1
+    last_rel_time = 0
+    light_0 = 0
+    light_00 = 0
+    
+    
+    
     while True:
         current_timestamp = time.ticks_ms()
         delta_time = time.ticks_diff(current_timestamp, last_timestamp)
         last_timestamp = current_timestamp
-
+        current_rel_time = current_timestamp - start_time
+        last_rel_time
+        
+        
         light_value = 0 # Initialize light_value
+        global frequency 
+
+        #print(current_rel_time%dur_ms ,"            ", last_rel_time%dur_ms)
+        if current_rel_time%dur_ms <= last_rel_time%dur_ms:
+            last_rel_time = current_rel_time
+            frequency_refresh = 1
+            light_00 = light_0
+            light_0 = clamped_light
 
         if recording_active:
             # Read sensor and record
@@ -166,19 +264,25 @@ async def main():
             clamped_light = max(min_light, min(light_value, max_light))
 
             if clamped_light > min_light:
-                frequency = map_value(
-                    clamped_light, min_light, max_light, min_freq, max_freq
-                )
-                buzzer_pin.freq(frequency)
-                buzzer_pin.duty_u16(32768)  # 50% duty cycle
+                if frequency_refresh == 1:
+                    frequency = map_value(
+                        clamped_light, min_light, max_light, min_freq, max_freq
+                    )
+                    frequency_refresh = 0
+                Play_Chord(frequency, current_rel_time%dur_ms, light_00, light_0)
+                #buzzer_pin.duty_u16(32768)  # 50% duty cycle
             else:
                 stop_tone()  # If it's very dark, be quiet
-
+        
+        last_rel_time = current_rel_time
+        
+        
         # Only sleep if not actively in replay managing its own sleep
         if not replay_active or replay_index >= len(recorded_data):
             await asyncio.sleep_ms(50) # type: ignore[attr-defined]
+            
 
-
+##########################################################################################
 # Run the main event loop
 if __name__ == "__main__":
     print("Pico Light Orchestra Instrument Code")
