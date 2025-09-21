@@ -1,1 +1,3 @@
 micropython_rp2_rpi_pico_stubs
+pytest
+requests-mock
